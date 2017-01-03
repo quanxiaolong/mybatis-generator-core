@@ -59,6 +59,17 @@ public class QxlCommonElementGenerator extends AbstractXmlElementGenerator {
 		parentElement.addElement(new TextElement(""));
 		parentElement.addElement(new TextElement("<!-- =============更新区域=============== -->"));
 		parentElement.addElement(new TextElement(""));
+		parentElement.addElement(new TextElement("<update id=\"updateById\" parameterType=\"java.lang.Long\">"));
+		parentElement.addElement(new TextElement("	UPDATE"));
+		parentElement.addElement(new TextElement("	<include refid=\"tableName\" />"));
+		parentElement.addElement(new TextElement("	<set>"));
+		parentElement.addElement(new TextElement("		<include refid=\"updateFields\"/>"));
+		parentElement.addElement(new TextElement("	</set>"));
+		parentElement.addElement(new TextElement("	WHERE "));
+		parentElement.addElement(new TextElement("		<include refid=\"pk\" /> = #{id,jdbcType=BIGINT}"));
+		parentElement.addElement(new TextElement("</update>"));
+		parentElement.addElement(new TextElement(""));
+		parentElement.addElement(new TextElement(""));
 		parentElement.addElement(new TextElement("<update id=\"update\">"));
 		parentElement.addElement(new TextElement("	UPDATE"));
 		parentElement.addElement(new TextElement("	<include refid=\"tableName\" />"));
@@ -68,7 +79,7 @@ public class QxlCommonElementGenerator extends AbstractXmlElementGenerator {
 		parentElement.addElement(new TextElement("	<include refid=\"database.operate.api.common.mapper.base_condition\" />"));
 		parentElement.addElement(new TextElement("</update>"));
 		parentElement.addElement(new TextElement(""));
-		parentElement.addElement(new TextElement("<update id=\"updateWithBatch\">"));
+		parentElement.addElement(new TextElement("<update id=\"updateBatchById\">"));
 		parentElement.addElement(new TextElement("	<foreach collection=\"models\" item=\"model\" index=\"index\" separator=\";\"> "));
 		parentElement.addElement(new TextElement("		UPDATE"));
 		parentElement.addElement(new TextElement("		<include refid=\"tableName\" />"));
@@ -93,7 +104,7 @@ public class QxlCommonElementGenerator extends AbstractXmlElementGenerator {
 		parentElement.addElement(new TextElement("	<include refid=\"insertValues\"/>"));
 		parentElement.addElement(new TextElement("</insert>"));
 		parentElement.addElement(new TextElement(""));
-		parentElement.addElement(new TextElement("<insert id=\"insertWithBatch\">"));
+		parentElement.addElement(new TextElement("<insert id=\"insertBatch\">"));
 		parentElement.addElement(new TextElement("	INSERT INTO "));
 		parentElement.addElement(new TextElement("	<include refid=\"tableName\" />	"));
 		parentElement.addElement(new TextElement("	<include refid=\"insertKeys\" />"));
@@ -119,7 +130,7 @@ public class QxlCommonElementGenerator extends AbstractXmlElementGenerator {
 		parentElement.addElement(new TextElement("		<include refid=\"pk\" /> = #{id,jdbcType=BIGINT}"));
 		parentElement.addElement(new TextElement("</select>"));
 		parentElement.addElement(new TextElement(""));
-		parentElement.addElement(new TextElement("<select id=\"searchWithBatch\" resultMap=\"BaseResultMap\">"));
+		parentElement.addElement(new TextElement("<select id=\"searchByIds\" resultMap=\"BaseResultMap\">"));
 		parentElement.addElement(new TextElement("	SELECT "));
 		parentElement.addElement(new TextElement("		<include refid=\"Base_Column_List\" />"));
 		parentElement.addElement(new TextElement("	FROM "));

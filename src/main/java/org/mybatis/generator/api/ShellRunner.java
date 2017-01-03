@@ -52,7 +52,7 @@ public class ShellRunner {
     private static final String HELP_2 = "-h"; //$NON-NLS-1$
 
     public static void main(String[] args) {
-//    	args=new String []{"-configfile","F:\\个人\\SpringMvc+Spring+MyBatis+Maven整合视频\\generator-qxlv2\\generator.xml","-overwrite"};
+    	args=new String []{"-configfile","F:\\个人\\SpringMvc+Spring+MyBatis+Maven整合视频\\generator-qxlv3\\generator.xml","-overwrite"};
     	if (args.length == 0) {
             usage();
             System.exit(0);
