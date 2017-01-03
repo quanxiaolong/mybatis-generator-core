@@ -99,6 +99,7 @@ public abstract class IntrospectedTable {
     	ATTR_PK,
     	ATTR_INSERT_KEYS,
     	ATTR_INSERT_VALUES,
+    	ATTR_ENUM_RECORD_TYPE,
     	;
     	
     }
@@ -354,6 +355,9 @@ public abstract class IntrospectedTable {
         return internalAttributes.get(InternalAttribute.ATTR_BASE_RECORD_TYPE);
     }
 
+    public String getEnumRecordType(){
+    	return internalAttributes.get(InternalAttribute.ATTR_ENUM_RECORD_TYPE);
+    }
     /**
      * 
      * @return the type for the example class.
@@ -1061,6 +1065,9 @@ public abstract class IntrospectedTable {
                 baseRecordType);
     }
 
+    public void setEnumRecordType(String enumRecordType){
+    	internalAttributes.put(InternalAttribute.ATTR_ENUM_RECORD_TYPE,enumRecordType);
+    }
     public void setRecordWithBLOBsType(String recordWithBLOBsType) {
         internalAttributes.put(InternalAttribute.ATTR_RECORD_WITH_BLOBS_TYPE,
                 recordWithBLOBsType);

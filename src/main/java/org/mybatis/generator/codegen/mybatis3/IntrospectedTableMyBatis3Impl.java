@@ -32,6 +32,7 @@ import org.mybatis.generator.codegen.mybatis3.javamapper.AnnotatedClientGenerato
 import org.mybatis.generator.codegen.mybatis3.javamapper.JavaMapperGenerator;
 import org.mybatis.generator.codegen.mybatis3.javamapper.MixedClientGenerator;
 import org.mybatis.generator.codegen.mybatis3.model.BaseRecordGenerator;
+import org.mybatis.generator.codegen.mybatis3.model.EnumBaseRecordGeneratorQxl;
 import org.mybatis.generator.codegen.mybatis3.model.ExampleGenerator;
 import org.mybatis.generator.codegen.mybatis3.model.PrimaryKeyGenerator;
 import org.mybatis.generator.codegen.mybatis3.model.RecordWithBLOBsGenerator;
@@ -46,12 +47,14 @@ import org.mybatis.generator.internal.ObjectFactory;
  */
 public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
     protected List<AbstractJavaGenerator> javaModelGenerators;
+    protected List<AbstractJavaGenerator> enumModelGengerators;
     protected List<AbstractJavaGenerator> clientGenerators;
     protected AbstractXmlGenerator xmlMapperGenerator;
 
     public IntrospectedTableMyBatis3Impl() {
         super(TargetRuntime.MYBATIS3);
         javaModelGenerators = new ArrayList<AbstractJavaGenerator>();
+        enumModelGengerators= new ArrayList<AbstractJavaGenerator>();
         clientGenerators = new ArrayList<AbstractJavaGenerator>();
     }
 
@@ -59,7 +62,7 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
     public void calculateGenerators(List<String> warnings,
             ProgressCallback progressCallback) {
         calculateJavaModelGenerators(warnings, progressCallback);
-        
+        calculateJavaEnum(warnings, progressCallback);
         AbstractJavaClientGenerator javaClientGenerator =
             calculateClientGenerators(warnings, progressCallback);
             
@@ -159,7 +162,14 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
             javaModelGenerators.add(javaGenerator);
         }
     }
+    protected void calculateJavaEnum(List<String> warnings,
+            ProgressCallback progressCallback) {
 
+        AbstractJavaGenerator javaGenerator = new EnumBaseRecordGeneratorQxl();
+        initializeAbstractGenerator(javaGenerator, warnings,
+                progressCallback);
+        enumModelGengerators.add(javaGenerator);
+    }
     protected void initializeAbstractGenerator(
             AbstractGenerator abstractGenerator, List<String> warnings,
             ProgressCallback progressCallback) {
@@ -182,6 +192,19 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
             List<CompilationUnit> compilationUnits = javaGenerator
                     .getCompilationUnits();
             for (CompilationUnit compilationUnit : compilationUnits) {
+                GeneratedJavaFile gjf = new GeneratedJavaFile(compilationUnit,
+                        context.getJavaModelGeneratorConfiguration()
+                                .getTargetProject(),
+                                context.getProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING),
+                                context.getJavaFormatter());
+                answer.add(gjf);
+            }
+        }
+        //生成Enum
+        for (AbstractJavaGenerator javaGenerator : enumModelGengerators){
+        	List<CompilationUnit> compilationUnits = javaGenerator
+                    .getCompilationUnits();
+        	for (CompilationUnit compilationUnit : compilationUnits) {
                 GeneratedJavaFile gjf = new GeneratedJavaFile(compilationUnit,
                         context.getJavaModelGeneratorConfiguration()
                                 .getTargetProject(),
