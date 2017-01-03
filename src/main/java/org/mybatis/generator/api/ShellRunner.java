@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -51,6 +52,7 @@ public class ShellRunner {
     private static final String HELP_2 = "-h"; //$NON-NLS-1$
 
     public static void main(String[] args) {
+    	args=new String []{"-configfile","F:\\个人\\SpringMvc+Spring+MyBatis+Maven整合视频\\generator\\generator.xml","-overwrite"};
         if (args.length == 0) {
             usage();
             System.exit(0);
@@ -115,6 +117,8 @@ public class ShellRunner {
                     : null;
 
             myBatisGenerator.generate(progressCallback, contexts, fullyqualifiedTables);
+//            Scanner scan = new Scanner(System.in);
+//            String read = scan.nextLine();
 
         } catch (XMLParserException e) {
             writeLine(getString("Progress.3")); //$NON-NLS-1$

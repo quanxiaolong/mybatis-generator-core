@@ -239,6 +239,7 @@ public class MyBatisGenerator {
         callback.saveStarted(generatedXmlFiles.size()
                 + generatedJavaFiles.size());
 
+        //创建xml
         for (GeneratedXmlFile gxf : generatedXmlFiles) {
             projects.add(gxf.getTargetProject());
 
@@ -277,6 +278,7 @@ public class MyBatisGenerator {
             writeFile(targetFile, source, "UTF-8"); //$NON-NLS-1$
         }
 
+        //创建Dao和Model
         for (GeneratedJavaFile gjf : generatedJavaFiles) {
             projects.add(gjf.getTargetProject());
 

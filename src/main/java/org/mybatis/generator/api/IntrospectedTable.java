@@ -92,7 +92,15 @@ public abstract class IntrospectedTable {
         ATTR_BASE_COLUMN_LIST_ID,
         ATTR_BLOB_COLUMN_LIST_ID,
         ATTR_MYBATIS3_UPDATE_BY_EXAMPLE_WHERE_CLAUSE_ID,
-        ATTR_MYBATIS3_SQL_PROVIDER_TYPE
+        ATTR_MYBATIS3_SQL_PROVIDER_TYPE,
+        //QXL
+        ATTR_UPDATE_FIELDS,
+    	ATTR_TABLE_NAME,
+    	ATTR_PK,
+    	ATTR_INSERT_KEYS,
+    	ATTR_INSERT_VALUES,
+    	;
+    	
     }
 
     protected TableConfiguration tableConfiguration;
@@ -536,6 +544,13 @@ public abstract class IntrospectedTable {
         setBaseColumnListId("Base_Column_List"); //$NON-NLS-1$
         setBlobColumnListId("Blob_Column_List"); //$NON-NLS-1$
         setMyBatis3UpdateByExampleWhereClauseId("Update_By_Example_Where_Clause"); //$NON-NLS-1$
+        
+        //QXL
+        setUpdateFields("updateFields");
+        setTableName("tableName");
+        setPk("pk");
+        setInsertKeys("insertKeys");
+        setInsertValues("insertValues");
     }
 
     public void setBlobColumnListId(String s) {
@@ -651,6 +666,27 @@ public abstract class IntrospectedTable {
                 InternalAttribute.ATTR_COUNT_BY_EXAMPLE_STATEMENT_ID, s);
     }
 
+    //QXL
+    public void setUpdateFields(String s){
+    	internalAttributes.put(
+                InternalAttribute.ATTR_UPDATE_FIELDS, s);
+    }
+    public void setTableName(String s){
+    	internalAttributes.put(
+                InternalAttribute.ATTR_TABLE_NAME, s);
+    }
+    public void setPk(String s){
+    	internalAttributes.put(
+                InternalAttribute.ATTR_PK, s);
+    }
+    public void setInsertKeys(String s){
+    	internalAttributes.put(
+                InternalAttribute.ATTR_INSERT_KEYS, s);
+    }
+    public void setInsertValues(String s){
+    	internalAttributes.put(
+                InternalAttribute.ATTR_INSERT_VALUES, s);
+    }
     public String getBlobColumnListId() {
         return internalAttributes
                 .get(InternalAttribute.ATTR_BLOB_COLUMN_LIST_ID);
@@ -750,7 +786,22 @@ public abstract class IntrospectedTable {
         return internalAttributes
                 .get(InternalAttribute.ATTR_DELETE_BY_EXAMPLE_STATEMENT_ID);
     }
-
+    //QXL
+    public String getUpdateFields(){
+    	return internalAttributes.get(InternalAttribute.ATTR_UPDATE_FIELDS);
+    }
+    public String getTableName(){
+    	return internalAttributes.get(InternalAttribute.ATTR_TABLE_NAME);
+    }
+    public String getPk(){
+    	return internalAttributes.get(InternalAttribute.ATTR_PK);
+    }
+    public String getInsertKeys(){
+    	return internalAttributes.get(InternalAttribute.ATTR_INSERT_KEYS);
+    }
+    public String getInsertValues(){
+    	return internalAttributes.get(InternalAttribute.ATTR_INSERT_VALUES);
+    }
     public String getCountByExampleStatementId() {
         return internalAttributes
                 .get(InternalAttribute.ATTR_COUNT_BY_EXAMPLE_STATEMENT_ID);

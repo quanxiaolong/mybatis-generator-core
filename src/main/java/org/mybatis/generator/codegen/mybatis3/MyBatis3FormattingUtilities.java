@@ -37,7 +37,33 @@ public class MyBatis3FormattingUtilities {
             IntrospectedColumn introspectedColumn) {
         return getParameterClause(introspectedColumn, null);
     }
+    
+    //QXL 
+    public static String qxlGetParameterClause(
+            IntrospectedColumn introspectedColumn) {
+        return qxlGetParameterClause(introspectedColumn, null);
+    }
+    
+  //QXL 
+    private static String qxlGetParameterClause(
+            IntrospectedColumn introspectedColumn, String prefix) {
+        StringBuilder sb = new StringBuilder();
 
+        sb.append("#{model."); //$NON-NLS-1$
+        sb.append(introspectedColumn.getJavaProperty(prefix));
+        sb.append(",jdbcType="); //$NON-NLS-1$
+        sb.append(introspectedColumn.getJdbcTypeName());
+
+        if (stringHasValue(introspectedColumn.getTypeHandler())) {
+            sb.append(",typeHandler="); //$NON-NLS-1$
+            sb.append(introspectedColumn.getTypeHandler());
+        }
+
+        sb.append('}');
+
+        return sb.toString();
+    }
+    
     public static String getParameterClause(
             IntrospectedColumn introspectedColumn, String prefix) {
         StringBuilder sb = new StringBuilder();

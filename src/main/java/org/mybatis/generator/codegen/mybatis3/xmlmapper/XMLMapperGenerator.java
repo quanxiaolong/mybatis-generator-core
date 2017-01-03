@@ -32,6 +32,14 @@ import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.DeleteByPrimary
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.ExampleWhereClauseElementGenerator;
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.InsertElementGenerator;
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.InsertSelectiveElementGenerator;
+import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.QxlBaseColumnListElementGenerator;
+import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.QxlCommonElementGenerator;
+import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.QxlInsertKeyElementGenerator;
+import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.QxlInsertValuesElementGenerator;
+import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.QxlPrimaryKeyElementGenerator;
+import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.QxlResultMapElementGenerator;
+import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.QxlTableNameElementGenerator;
+import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.QxlUpdateFieldsElementGenerator;
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.ResultMapWithBLOBsElementGenerator;
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.ResultMapWithoutBLOBsElementGenerator;
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.SelectByExampleWithBLOBsElementGenerator;
@@ -66,33 +74,41 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
 
         context.getCommentGenerator().addRootComment(answer);
 
-        addResultMapWithoutBLOBsElement(answer);
-        addResultMapWithBLOBsElement(answer);
-        addExampleWhereClauseElement(answer);
-        addMyBatis3UpdateByExampleWhereClauseElement(answer);
-        addBaseColumnListElement(answer);
-        addBlobColumnListElement(answer);
-        addSelectByExampleWithBLOBsElement(answer);
-        addSelectByExampleWithoutBLOBsElement(answer);
-        addSelectByPrimaryKeyElement(answer);
-        addDeleteByPrimaryKeyElement(answer);
-        addDeleteByExampleElement(answer);
-        addInsertElement(answer);
-        addInsertSelectiveElement(answer);
-        addCountByExampleElement(answer);
-        addUpdateByExampleSelectiveElement(answer);
-        addUpdateByExampleWithBLOBsElement(answer);
-        addUpdateByExampleWithoutBLOBsElement(answer);
-        addUpdateByPrimaryKeySelectiveElement(answer);
-        addUpdateByPrimaryKeyWithBLOBsElement(answer);
-        addUpdateByPrimaryKeyWithoutBLOBsElement(answer);
-
+        //addResultMapWithoutBLOBsElement(answer);
+        //addResultMapWithBLOBsElement(answer);
+        //addExampleWhereClauseElement(answer);
+        //addMyBatis3UpdateByExampleWhereClauseElement(answer);
+        //addBaseColumnListElement(answer);
+       // addBlobColumnListElement(answer);
+//        addSelectByExampleWithBLOBsElement(answer);
+//        addSelectByExampleWithoutBLOBsElement(answer);
+//        addSelectByPrimaryKeyElement(answer);
+//        addDeleteByPrimaryKeyElement(answer);
+//        addDeleteByExampleElement(answer);
+//        addInsertElement(answer);
+//        addInsertSelectiveElement(answer);
+//        addCountByExampleElement(answer);
+//        addUpdateByExampleSelectiveElement(answer);
+//        addUpdateByExampleWithBLOBsElement(answer);
+//        addUpdateByExampleWithoutBLOBsElement(answer);
+//        addUpdateByPrimaryKeySelectiveElement(answer);
+//        addUpdateByPrimaryKeyWithBLOBsElement(answer);
+//        addUpdateByPrimaryKeyWithoutBLOBsElement(answer);
+        //Qxl
+        addResultMapElement(answer);
+        addTabelName(answer);
+        addPk(answer);
+        addQxlBaseColumnListElement(answer);
+        addUpdateFields(answer);
+        addInsertKeys(answer);
+        addInsertValues(answer);
+        addCommonElement(answer);
         return answer;
     }
 
     protected void addResultMapWithoutBLOBsElement(XmlElement parentElement) {
         if (introspectedTable.getRules().generateBaseResultMap()) {
-            AbstractXmlElementGenerator elementGenerator = new ResultMapWithoutBLOBsElementGenerator(false);
+            AbstractXmlElementGenerator elementGenerator = new ResultMapWithoutBLOBsElementGenerator(true);
             initializeAndExecuteGenerator(elementGenerator, parentElement);
         }
     }
@@ -239,7 +255,43 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
             initializeAndExecuteGenerator(elementGenerator, parentElement);
         }
     }
-
+    //QXL
+    private void addResultMapElement(XmlElement parentElement) {
+        if (introspectedTable.getRules().generateBaseResultMap()) {
+            AbstractXmlElementGenerator elementGenerator = new QxlResultMapElementGenerator(true);
+            initializeAndExecuteGenerator(elementGenerator, parentElement);
+        }
+    }
+    private void addTabelName(XmlElement parentElement){
+    	AbstractXmlElementGenerator elementGenerator = new QxlTableNameElementGenerator();
+        initializeAndExecuteGenerator(elementGenerator, parentElement);
+    }
+    private void addPk(XmlElement parentElement){
+    	AbstractXmlElementGenerator elementGenerator = new QxlPrimaryKeyElementGenerator();
+        initializeAndExecuteGenerator(elementGenerator, parentElement);
+    }
+    private void addQxlBaseColumnListElement(XmlElement parentElement) {
+        if (introspectedTable.getRules().generateBaseColumnList()) {
+            AbstractXmlElementGenerator elementGenerator = new QxlBaseColumnListElementGenerator();
+            initializeAndExecuteGenerator(elementGenerator, parentElement);
+        }
+    }
+    private void addUpdateFields(XmlElement parentElement){
+    	AbstractXmlElementGenerator elementGenerator = new QxlUpdateFieldsElementGenerator();
+        initializeAndExecuteGenerator(elementGenerator, parentElement);
+    }
+    private void addInsertKeys(XmlElement parentElement){
+    	AbstractXmlElementGenerator elementGenerator = new QxlInsertKeyElementGenerator();
+        initializeAndExecuteGenerator(elementGenerator, parentElement);
+    }
+    private void addInsertValues(XmlElement parentElement){
+    	AbstractXmlElementGenerator elementGenerator = new QxlInsertValuesElementGenerator();
+        initializeAndExecuteGenerator(elementGenerator, parentElement);
+    }
+    private void addCommonElement(XmlElement parentElement){
+    	AbstractXmlElementGenerator elementGenerator = new QxlCommonElementGenerator();
+        initializeAndExecuteGenerator(elementGenerator, parentElement);
+    }
     protected void initializeAndExecuteGenerator(
             AbstractXmlElementGenerator elementGenerator,
             XmlElement parentElement) {

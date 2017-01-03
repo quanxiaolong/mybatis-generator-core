@@ -22,7 +22,9 @@ import org.mybatis.generator.api.dom.OutputUtilities;
  */
 public class Field extends JavaElement {
     private FullyQualifiedJavaType type;
-    private String name;
+    private String name;			//属性名称
+    private String dbName;			//数据库字段名称 qxl
+    private String remark;
     private String initializationString;
     private boolean isTransient;
     private boolean isVolatile;
@@ -45,6 +47,7 @@ public class Field extends JavaElement {
         super(field);
         this.type = field.type;
         this.name = field.name;
+        this.dbName=field.dbName;
         this.initializationString = field.initializationString;
     }
 
@@ -63,7 +66,16 @@ public class Field extends JavaElement {
         this.name = name;
     }
 
-    /**
+    
+    public String getDbName() {
+		return dbName;
+	}
+
+	public void setDbName(String dbName) {
+		this.dbName = dbName;
+	}
+
+	/**
      * @return Returns the type.
      */
     public FullyQualifiedJavaType getType() {
@@ -129,6 +141,9 @@ public class Field extends JavaElement {
         }
 
         sb.append(';');
+        
+        sb.append("            //");
+        sb.append(remark);
 
         return sb.toString();
     }
@@ -148,4 +163,13 @@ public class Field extends JavaElement {
     public void setVolatile(boolean isVolatile) {
         this.isVolatile = isVolatile;
     }
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+    
 }

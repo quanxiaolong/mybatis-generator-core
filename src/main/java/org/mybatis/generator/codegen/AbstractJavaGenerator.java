@@ -84,6 +84,8 @@ public abstract class AbstractJavaGenerator extends AbstractGenerator {
         field.setVisibility(JavaVisibility.PRIVATE);
         field.setType(fqjt);
         field.setName(property);
+        field.setDbName(introspectedColumn.getActualColumnName());
+        field.setRemark(introspectedColumn.getRemarks());
         context.getCommentGenerator().addFieldComment(field,
                 introspectedTable, introspectedColumn);
 
@@ -103,16 +105,17 @@ public abstract class AbstractJavaGenerator extends AbstractGenerator {
                 introspectedTable, introspectedColumn);
 
         StringBuilder sb = new StringBuilder();
-        if (isTrimStringsEnabled() && introspectedColumn.isStringColumn()) {
-            sb.append("this."); //$NON-NLS-1$
-            sb.append(property);
-            sb.append(" = "); //$NON-NLS-1$
-            sb.append(property);
-            sb.append(" == null ? null : "); //$NON-NLS-1$
-            sb.append(property);
-            sb.append(".trim();"); //$NON-NLS-1$
-            method.addBodyLine(sb.toString());
-        } else {
+//        if (isTrimStringsEnabled() && introspectedColumn.isStringColumn()) {
+//            sb.append("this."); //$NON-NLS-1$
+//            sb.append(property);
+//            sb.append(" = "); //$NON-NLS-1$
+//            sb.append(property);
+//            sb.append(" == null ? null : "); //$NON-NLS-1$
+//            sb.append(property);
+//            sb.append(".trim();"); //$NON-NLS-1$
+//            method.addBodyLine(sb.toString());
+//        } else 
+        {
             sb.append("this."); //$NON-NLS-1$
             sb.append(property);
             sb.append(" = "); //$NON-NLS-1$
