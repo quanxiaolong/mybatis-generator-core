@@ -34,6 +34,7 @@ import org.mybatis.generator.codegen.mybatis3.javamapper.MixedClientGenerator;
 import org.mybatis.generator.codegen.mybatis3.model.BaseRecordGenerator;
 import org.mybatis.generator.codegen.mybatis3.model.EnumBaseRecordGeneratorQxl;
 import org.mybatis.generator.codegen.mybatis3.model.ExampleGenerator;
+import org.mybatis.generator.codegen.mybatis3.model.JavaModelRecordGeneratorQxl;
 import org.mybatis.generator.codegen.mybatis3.model.PrimaryKeyGenerator;
 import org.mybatis.generator.codegen.mybatis3.model.RecordWithBLOBsGenerator;
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.XMLMapperGenerator;
@@ -149,18 +150,20 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
         }
 
         if (getRules().generateBaseRecordClass()) {
-            AbstractJavaGenerator javaGenerator = new BaseRecordGenerator();
+//            AbstractJavaGenerator javaGenerator = new BaseRecordGenerator();
+        	//QXL JavaModel中生成所有字段，BaseRecordGenerator 只生成非Text类型的字段
+        	AbstractJavaGenerator javaGenerator = new JavaModelRecordGeneratorQxl();
             initializeAbstractGenerator(javaGenerator, warnings,
                     progressCallback);
             javaModelGenerators.add(javaGenerator);
         }
-
-        if (getRules().generateRecordWithBLOBsClass()) {
-            AbstractJavaGenerator javaGenerator = new RecordWithBLOBsGenerator();
-            initializeAbstractGenerator(javaGenerator, warnings,
-                    progressCallback);
-            javaModelGenerators.add(javaGenerator);
-        }
+        //不生成BLOBs对象（字段类型为Text的对象）QXL
+//        if (getRules().generateRecordWithBLOBsClass()) {
+//            AbstractJavaGenerator javaGenerator = new RecordWithBLOBsGenerator();
+//            initializeAbstractGenerator(javaGenerator, warnings,
+//                    progressCallback);
+//            javaModelGenerators.add(javaGenerator);
+//        }
     }
     protected void calculateJavaEnum(List<String> warnings,
             ProgressCallback progressCallback) {

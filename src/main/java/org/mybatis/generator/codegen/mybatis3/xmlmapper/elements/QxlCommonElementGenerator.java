@@ -67,6 +67,18 @@ public class QxlCommonElementGenerator extends AbstractXmlElementGenerator {
 		parentElement.addElement(new TextElement("	</set>"));
 		parentElement.addElement(new TextElement("	<include refid=\"database.operate.api.common.mapper.base_condition\" />"));
 		parentElement.addElement(new TextElement("</update>"));
+		parentElement.addElement(new TextElement(""));
+		parentElement.addElement(new TextElement("<update id=\"updateWithBatch\">"));
+		parentElement.addElement(new TextElement("	<foreach collection=\"models\" item=\"model\" index=\"index\" separator=\";\"> "));
+		parentElement.addElement(new TextElement("		UPDATE"));
+		parentElement.addElement(new TextElement("		<include refid=\"tableName\" />"));
+		parentElement.addElement(new TextElement("		<set>"));
+		parentElement.addElement(new TextElement("			<include refid=\"updateFields\"/>"));
+		parentElement.addElement(new TextElement("		</set>"));
+		parentElement.addElement(new TextElement("		WHERE"));
+		parentElement.addElement(new TextElement("			<include refid=\"pk\" /> = #{model.id,jdbcType=BIGINT}"));
+		parentElement.addElement(new TextElement("	</foreach>"));
+		parentElement.addElement(new TextElement("</update>"));
 	}
 
 	private void createInsertElement(XmlElement parentElement) {

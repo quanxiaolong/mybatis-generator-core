@@ -31,7 +31,6 @@ import org.mybatis.generator.api.dom.java.JavaVisibility;
 import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.Parameter;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
-import org.mybatis.generator.api.dom.java.TopLevelEnumerationQxl;
 import org.mybatis.generator.codegen.AbstractJavaGenerator;
 import org.mybatis.generator.codegen.RootClassInfo;
 
@@ -40,9 +39,9 @@ import org.mybatis.generator.codegen.RootClassInfo;
  * @author Jeff Butler
  * 
  */
-public class EnumBaseRecordGeneratorQxl extends AbstractJavaGenerator {
+public class JavaModelRecordGeneratorQxl extends AbstractJavaGenerator {
 
-    public EnumBaseRecordGeneratorQxl() {
+    public JavaModelRecordGeneratorQxl() {
         super();
     }
 
@@ -53,16 +52,28 @@ public class EnumBaseRecordGeneratorQxl extends AbstractJavaGenerator {
                 "Progress.8", table.toString())); //$NON-NLS-1$
         Plugin plugins = context.getPlugins();
         CommentGenerator commentGenerator = context.getCommentGenerator();
-        String path=introspectedTable.getBaseRecordType();
-        path=path.replace("model.", "enum.Field");
+
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(
-        		path);
-        TopLevelEnumerationQxl topLevelClass = new TopLevelEnumerationQxl(type);
+                introspectedTable.getBaseRecordType());
+        TopLevelClass topLevelClass = new TopLevelClass(type);
         topLevelClass.setVisibility(JavaVisibility.PUBLIC);
         commentGenerator.addJavaFileComment(topLevelClass);
 
+        FullyQualifiedJavaType superClass = getSuperClass();
+        if (superClass != null) {
+            topLevelClass.setSuperClass(superClass);
+            topLevelClass.addImportedType(superClass);
+        }
 
         List<IntrospectedColumn> introspectedColumns = getColumnsInThisClass();
+
+        if (introspectedTable.isConstructorBased()) {
+            addParameterizedConstructor(topLevelClass);
+            
+            if (!introspectedTable.isImmutable()) {
+                addDefaultConstructor(topLevelClass);
+            }
+        }
         
         String rootClass = getRootClass();
         for (IntrospectedColumn introspectedColumn : introspectedColumns) {
@@ -72,28 +83,35 @@ public class EnumBaseRecordGeneratorQxl extends AbstractJavaGenerator {
             }
 
             Field field = getJavaBeansField(introspectedColumn);
-            topLevelClass.addField(field);
-//            topLevelClass.addImportedType(field.getType());
-              //topLevelClass.addEnumConstant(field.getDbName(),field.getName());
-//            Method method = getJavaBeansGetter(introspectedColumn);
-//            if (plugins.modelGetterMethodGenerated(method, topLevelClass,
-//                    introspectedColumn, introspectedTable,
-//                    Plugin.ModelClassType.BASE_RECORD)) {
-//                topLevelClass.addMethod(method);
-//            }
-//
-//            if (!introspectedTable.isImmutable()) {
-//                method = getJavaBeansSetter(introspectedColumn);
-//                if (plugins.modelSetterMethodGenerated(method, topLevelClass,
-//                        introspectedColumn, introspectedTable,
-//                        Plugin.ModelClassType.BASE_RECORD)) {
-//                    topLevelClass.addMethod(method);
-//                }
-//            }
+            if (plugins.modelFieldGenerated(field, topLevelClass,
+                    introspectedColumn, introspectedTable,
+                    Plugin.ModelClassType.BASE_RECORD)) {
+                topLevelClass.addField(field);
+                topLevelClass.addImportedType(field.getType());
+            }
+
+            Method method = getJavaBeansGetter(introspectedColumn);
+            if (plugins.modelGetterMethodGenerated(method, topLevelClass,
+                    introspectedColumn, introspectedTable,
+                    Plugin.ModelClassType.BASE_RECORD)) {
+                topLevelClass.addMethod(method);
+            }
+
+            if (!introspectedTable.isImmutable()) {
+                method = getJavaBeansSetter(introspectedColumn);
+                if (plugins.modelSetterMethodGenerated(method, topLevelClass,
+                        introspectedColumn, introspectedTable,
+                        Plugin.ModelClassType.BASE_RECORD)) {
+                    topLevelClass.addMethod(method);
+                }
+            }
         }
 
         List<CompilationUnit> answer = new ArrayList<CompilationUnit>();
-        answer.add(topLevelClass);
+        if (context.getPlugins().modelBaseRecordClassGenerated(
+                topLevelClass, introspectedTable)) {
+            answer.add(topLevelClass);
+        }
         return answer;
     }
 

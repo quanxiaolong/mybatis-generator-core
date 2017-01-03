@@ -52,17 +52,18 @@ public class QxlUpdateFieldsElementGenerator extends
         int index=1;
         int size=listItem.size();
         for (IntrospectedColumn introspectedColumn :listItem) {
+        	String collumnName=MyBatis3FormattingUtilities
+                    .getEscapedColumnName(introspectedColumn);
             XmlElement isNotNullElement = new XmlElement("if"); //$NON-NLS-1$
             sb.setLength(0);
             sb.append("updateField.listField.contains('");
-            sb.append(introspectedColumn.getJavaProperty());
+            sb.append(collumnName);
             sb.append("')"); //$NON-NLS-1$
             isNotNullElement.addAttribute(new Attribute("test", sb.toString())); //$NON-NLS-1$
             answer.addElement(isNotNullElement);
 
             sb.setLength(0);
-            sb.append(MyBatis3FormattingUtilities
-                    .getEscapedColumnName(introspectedColumn));
+            sb.append(collumnName);
             sb.append(" = "); //$NON-NLS-1$
             sb.append(MyBatis3FormattingUtilities
                     .qxlGetParameterClause(introspectedColumn));
