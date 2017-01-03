@@ -1,0 +1,1 @@
+java -jar mybatis-generator-qxl.jar -configfile generator.xml -overwrite
